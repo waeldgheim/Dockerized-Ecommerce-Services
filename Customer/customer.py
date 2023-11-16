@@ -236,14 +236,3 @@ if __name__ == "__main__":
     #app.debug = True
     #app.run(debug=True)
     app.run() #run app    
-
-
-user1 = {
-    "fullname" : "John Doe",
-    "username" : "jdsd", 
-    "password" : "1234", 
-    "age" : "54", 
-    "address" : "Beirut",
-    "gender" : "male" ,
-    "marital_status" : "married"
-}
