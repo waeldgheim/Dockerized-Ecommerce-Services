@@ -33,9 +33,9 @@ def create_db_table():
                       ); 
                     ''')
         conn.commit() 
-        print("User table created successfully") 
+        print("Goods table created successfully") 
     except: 
-        print("User table creation failed - Maybe table") 
+        print("Goods table creation failed - Maybe table") 
     finally: 
         conn.close()
 
