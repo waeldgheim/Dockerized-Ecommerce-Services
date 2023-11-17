@@ -13,31 +13,8 @@ class UserAlreadyTaken(Exception):
     pass
 
 def connect_to_db(): 
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('../database.db')
     return conn
-
-def create_db_table(): 
-    try: 
-        conn = connect_to_db()
-        conn.execute(''' 
-                     CREATE TABLE users ( 
-                      user_id INTEGER PRIMARY KEY NOT NULL,
-                      fullname TEXT NOT NULL,
-                      username TEXT NOT NULL,
-                      password TEXT NOT NULL,
-                      age TEXT NOT NULL,
-                      address TEXT NOT NULL,
-                      gender TEXT NOT NULL,
-                      marital_status TEXT NOT NULL,
-                      wallet INTEGER NOT NULL DEFAULT 0
-                      ); 
-                    ''')
-        conn.commit() 
-        print("User table created successfully") 
-    except: 
-        print("User table creation failed - Maybe table") 
-    finally: 
-        conn.close()
 
 def register(user):
     registered_user = {}

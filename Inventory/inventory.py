@@ -16,28 +16,8 @@ class AlreadyRegistered(Exception):
     pass
 
 def connect_to_db(): 
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('../database.db')
     return conn
-
-def create_db_table(): 
-    try: 
-        conn = connect_to_db()
-        conn.execute(''' 
-                     CREATE TABLE goods ( 
-                      user_id INTEGER PRIMARY KEY NOT NULL,
-                      name TEXT NOT NULL,
-                      category TEXT NOT NULL,
-                      price FLOAT NOT NULL,
-                      description TEXT NOT NULL,
-                      count INTEGER NOT NULL
-                      ); 
-                    ''')
-        conn.commit() 
-        print("Goods table created successfully") 
-    except: 
-        print("Goods table creation failed - Maybe table") 
-    finally: 
-        conn.close()
 
 def add_goods(good):
     message ={}
