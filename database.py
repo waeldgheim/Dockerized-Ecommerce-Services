@@ -39,7 +39,19 @@ def create_db_table():
         conn.commit() 
         print("Goods table created successfully") 
     except: 
-        print("Goods table creation failed - Maybe table") 
+        print("Goods table creation failed - Maybe table")
+    try:
+        conn.execute(''' 
+                    CREATE TABLE history ( 
+                    user_id INTEGER PRIMARY KEY NOT NULL,
+                    name TEXT NOT NULL,
+                    item TEXT NOT NULL
+                    ); 
+                ''')   
+        conn.commit() 
+        print("History table created successfully") 
+    except: 
+        print("History table creation failed - Maybe table") 
 
     finally: 
         conn.close()
