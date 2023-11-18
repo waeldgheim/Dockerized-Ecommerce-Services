@@ -13,7 +13,7 @@ class UserAlreadyTaken(Exception):
     pass
 
 def connect_to_db(): 
-    conn = sqlite3.connect('../database.db')
+    conn = sqlite3.connect('database.db')
     return conn
 
 def register(user):
@@ -56,7 +56,7 @@ def delete(username):
         conn.close() 
     return message
 
-def update(user):
+def update_user(user):
     username = user["username"]
     message = {}
     updated_user = {} 
@@ -134,7 +134,7 @@ def charge(username,amount):
         if type(amount)!= float and type(amount)!= int:
             raise TypeError
         cur.execute("UPDATE users SET  wallet= ? WHERE username =?", 
-                        (amount, user["username"],)) 
+                        (user["wallet"]+amount, user["username"],)) 
         conn.commit()
         updated_user = get_user_by_username(user["username"]) 
     except:
@@ -147,7 +147,7 @@ def charge(username,amount):
 
     
 
-def deduce(username,amount):
+def deduce_wallet(username,amount):
     message = {}
     message["status"] = "Successfully reduced!"
     user = get_user_by_username(username)
@@ -192,7 +192,7 @@ def api_add_user():
 @app.route('/api/users/update', methods = ['PUT'])
 def api_update_user():
     user = request.get_json()
-    return jsonify(update(user))
+    return jsonify(update_user(user))
 
 @app.route('/api/users/delete/<username>', methods = ['DELETE'])
 def api_delete_user(username):
@@ -207,7 +207,7 @@ def api_charge(username):
 @app.route('/api/users/deduce/<username>', methods = ['PUT'])
 def api_reduce(username):
     amount = request.get_json()
-    return jsonify(deduce(username,amount))
+    return jsonify(deduce_wallet(username,amount))
 
 if __name__ == "__main__":
     #app.debug = True

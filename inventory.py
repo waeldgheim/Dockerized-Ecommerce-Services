@@ -16,7 +16,7 @@ class AlreadyRegistered(Exception):
     pass
 
 def connect_to_db(): 
-    conn = sqlite3.connect('../database.db')
+    conn = sqlite3.connect('database.db')
     return conn
 
 def add_goods(good):
@@ -40,7 +40,7 @@ def add_goods(good):
          conn.close() 
     return message,good
 
-def deduce(name):
+def deduce_good(name):
     good = get_good_by_name(name)
     updated_good = {}
     message = {}
@@ -61,14 +61,13 @@ def deduce(name):
         conn.rollback() 
         message['status'] = "Good is out of stock"
     except:
-         print("ka")
          conn.rollback() 
          updated_good = {} 
     finally: 
          conn.close() 
     return message,updated_good
 
-def update(good):
+def update_good(good):
     name = good["name"]
     message = {}
     updated_good = {} 
@@ -118,12 +117,12 @@ def api_add_user():
 
 @app.route('/api/goods/deduce/<name>', methods = ['PUT'])
 def api_reduce(name):
-    return jsonify(deduce(name))
+    return jsonify(deduce_good(name))
 
 @app.route('/api/goods/update', methods = ['PUT'])
 def api_update_user():
     good = request.get_json()
-    return jsonify(update(good))
+    return jsonify(update_good(good))
 
 if __name__ == "__main__":
     #app.debug = True

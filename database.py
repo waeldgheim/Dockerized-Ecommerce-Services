@@ -20,7 +20,12 @@ def create_db_table():
                       wallet INTEGER NOT NULL DEFAULT 0
                       ); 
                     ''')
-        
+        conn.commit() 
+        print("User table created successfully") 
+    except: 
+        print("User table creation failed - Maybe table") 
+
+    try:
         conn.execute(''' 
                      CREATE TABLE goods ( 
                       user_id INTEGER PRIMARY KEY NOT NULL,
@@ -30,12 +35,12 @@ def create_db_table():
                       description TEXT NOT NULL,
                       count INTEGER NOT NULL
                       ); 
-                    ''')
-
+                    ''')   
         conn.commit() 
-        print("User table created successfully") 
+        print("Goods table created successfully") 
     except: 
-        print("User table creation failed - Maybe table") 
+        print("Goods table creation failed - Maybe table") 
+
     finally: 
         conn.close()
 
