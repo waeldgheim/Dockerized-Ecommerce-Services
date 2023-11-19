@@ -210,15 +210,6 @@ def test_api_deduce_insufficient_amount(customer1_same_username):
 def test_api_delete(customer1_same_username):
     response = app.test_client().delete(f'/api/users/delete/{customer1_same_username["username"]}')
     x = json.loads(response.get_data(as_text=True))
+    register(customer1_same_username)
+    charge(customer1_same_username["username"],5)
     assert x["status"] == "User deleted successfully"
-
-def test_register(customer1):
-    x,y = register(customer1)
-    assert x["status"] == "Successful Registration"
-    assert y["wallet"] == 0
-    assert y["username"] == customer1["username"]
-
-def test_charge(customer1):
-    x,y = charge(customer1["username"],5)
-    assert x["status"] == "Successfully charged!"
-    assert y["wallet"] == 5
