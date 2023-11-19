@@ -84,7 +84,6 @@ def update_good(good):
         updated_good = get_good_by_name(good["name"])
         message["status"] = "Succefully updated good"
     except:
-         print("hon")
          conn.rollback() 
          updated_good = {} 
     finally: 
