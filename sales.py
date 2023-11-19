@@ -40,7 +40,7 @@ def sale(username,name):
         elif user["wallet"] < good["price"]:
             raise InsufficientAmount('Not enough available to spend {}'.format(good["price"]))
         elif good["count"] == 0:
-            raise OutOfStock('Good is out of stock')
+            raise OutOfStock('{} is out of stock'.format(good["name"]))
         message["status"] = "Purchase successful"
         save_purchase(username,name)
     except InsufficientAmount:
