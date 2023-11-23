@@ -1,10 +1,12 @@
 import sqlite3
 
 def connect_to_db(): 
+    #Connect to database
     conn = sqlite3.connect('database.db')
     return conn
 
 def create_db_table(): 
+    #Creates the 3 tables user, inventory, and history
     try: 
         conn = connect_to_db()
         conn.execute(''' 
