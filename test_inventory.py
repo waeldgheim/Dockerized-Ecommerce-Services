@@ -164,3 +164,8 @@ def test_api_deduce(item1):
     :param item1: contains information about the item
     :type item1: dictionary
     '''
+    response = app.test_client().put(f'/api/goods/deduce/{item1["name"]}')
+    x,y = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200 
+    assert x["status"] == "Succefully deduced item"
+    assert y["count"] == item1["count"] - 1
