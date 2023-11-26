@@ -16,10 +16,19 @@ class AlreadyRegistered(Exception):
     pass
 
 def connect_to_db(): 
+    """Connects to the database
+    """
     conn = sqlite3.connect('database.db')
     return conn
 
 def add_goods(good):
+    """Adds the good to the database
+    :param good: Contains information about the good
+    :type user: dictionary
+    :raises CategoryNotFound: if the category is invalid, the error will be raised
+    :return: A message confirming registration status and the information of the registered good
+    :rtype: Both are dictionaries
+    """
     message ={}
     conn = connect_to_db()
     cur = conn.cursor()
@@ -41,6 +50,13 @@ def add_goods(good):
     return message,good
 
 def deduce_good(name):
+    """Reduces the count of the good by one
+    :param name: Name of the good whose count we want to reduce
+    :type name: string
+    :raises OutOfStock: when the count of the good = 0 before deduction, the error will be raised
+    :return: A message confirming deduction status and the information of the updated good
+    :rtype: Both are dictionaries
+    """
     good = get_good_by_name(name)
     updated_good = {}
     message = {}
@@ -68,6 +84,12 @@ def deduce_good(name):
     return message,updated_good
 
 def update_good(good):
+    """Updates the information of a specified good
+    :param good: contains the information of the specified good
+    :type name: dictionary
+    :return: A message confirming update status and the information of the updated good
+    :rtype: Both are dictionaries
+    """
     name = good["name"]
     message = {}
     updated_good = {} 
@@ -92,6 +114,12 @@ def update_good(good):
 
 
 def get_good_by_name(name): 
+    """Get the information of the good from the database using its name
+    :param name: Name of the good we want to extract
+    :type name: string
+    :return: the information of the specified good
+    :rtype: dictionary
+    """
     good = {}
     try:
         conn = connect_to_db() 
@@ -111,19 +139,35 @@ def get_good_by_name(name):
 
 @app.route('/api/goods/add', methods = ['POST'])
 def api_add_user():
+    """API implementation of add_goods()
+    :return: A message confirming registration status and the infromation of the registered good
+    :rtype: json object
+    """  
     good = request.get_json()
     return jsonify(add_goods(good))
 
 @app.route('/api/goods/deduce/<name>', methods = ['PUT'])
 def api_reduce(name):
+    """API implementation of deduce_good()
+    :param name: the name of the good whose count we're reducing
+    :type name: string
+    :return: A message confirming deduction status and the information of the updated good
+    :rtype: json object
+    """
     return jsonify(deduce_good(name))
 
 @app.route('/api/goods/update', methods = ['PUT'])
 def api_update_user():
+    """API implementation of update_good()
+    :return: A message confirming update status and the information of the updated good
+    :rtype: json object
+    """
     good = request.get_json()
     return jsonify(update_good(good))
 
 if __name__ == "__main__":
+    """Runs the flask app
+    """
     #app.debug = True
     #app.run(debug=True)
     app.run() #run app
