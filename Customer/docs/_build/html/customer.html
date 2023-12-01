@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>customer module &mdash; Customer 00.00.01 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Customer" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Customer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Customer</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">customer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#customer.InsufficientAmount"><code class="docutils literal notranslate"><span class="pre">InsufficientAmount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.UserAlreadyTaken"><code class="docutils literal notranslate"><span class="pre">UserAlreadyTaken</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_add_user"><code class="docutils literal notranslate"><span class="pre">api_add_user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_charge"><code class="docutils literal notranslate"><span class="pre">api_charge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_delete_user"><code class="docutils literal notranslate"><span class="pre">api_delete_user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_get_user"><code class="docutils literal notranslate"><span class="pre">api_get_user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_get_users"><code class="docutils literal notranslate"><span class="pre">api_get_users()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_reduce"><code class="docutils literal notranslate"><span class="pre">api_reduce()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.api_update_user"><code class="docutils literal notranslate"><span class="pre">api_update_user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.charge"><code class="docutils literal notranslate"><span class="pre">charge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.deduce_wallet"><code class="docutils literal notranslate"><span class="pre">deduce_wallet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.get_user_by_username"><code class="docutils literal notranslate"><span class="pre">get_user_by_username()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.get_users"><code class="docutils literal notranslate"><span class="pre">get_users()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer.update_user"><code class="docutils literal notranslate"><span class="pre">update_user()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Customer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Customer</a></li>
+      <li class="breadcrumb-item active">customer module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/customer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-customer">
+<span id="customer-module"></span><h1>customer module<a class="headerlink" href="#module-customer" title="Permalink to this heading"></a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="customer.InsufficientAmount">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">InsufficientAmount</span></span><a class="reference internal" href="_modules/customer.html#InsufficientAmount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.InsufficientAmount" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="customer.UserAlreadyTaken">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">UserAlreadyTaken</span></span><a class="reference internal" href="_modules/customer.html#UserAlreadyTaken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.UserAlreadyTaken" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_add_user">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_add_user</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_add_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_add_user" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of register()
+:return: A message confirming registration status and the infromation of the registered user
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_charge">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_charge" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of charge()
+:param username: the username of the user whose wallet we’re charging
+:type username: string
+:return: A message confirming the status of charging and the updated user
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_delete_user">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_delete_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_delete_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_delete_user" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of delete()
+:param username: the username of the user whom we’re deleting
+:type username: string
+:return: A message confirming deletion status
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_get_user">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_get_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_get_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_get_user" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of get_user_by_username()
+:param username: the username of the user whose information we are getting
+:type username: string
+:return: the information of the user
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_get_users">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_get_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_get_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_get_users" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of get_users()
+:return: the information of all users in the database
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_reduce">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_reduce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_reduce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_reduce" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of deduce_wallet()
+:param username: the username of the user whose wallet we’re decreasing
+:type username: string
+:return: A message confirming the status of deducing and the updated user
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.api_update_user">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">api_update_user</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#api_update_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.api_update_user" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of update_user()
+:return: The information of the updated user if update is complete, a message if update fails
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.charge">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.charge" title="Permalink to this definition"></a></dt>
+<dd><p>Increasing the wallet of the user by a number (amount)
+:param username: the username of the user whose wallet is to be modified
+:type username: string
+:param amount: amount we want to add to the wallet
+:type amount: float
+:raises TypeError: if the amount given is not in integers nor float, it raises the error
+:return: A message confirming the status of charging and the updated user
+:rtype: Both are dictionaries</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.deduce_wallet">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">deduce_wallet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#deduce_wallet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.deduce_wallet" title="Permalink to this definition"></a></dt>
+<dd><p>Decreasing the wallet of the user by a number (amount)
+:param username: the username of the user whose wallet is to be modified
+:type username: string
+:param amount: amount we want to reduce from the wallet
+:type amount: float
+:raises TypeError: if the amount given is not in integers nor float, it raises the error
+:raises InsufficientAmount: if the user’s wallet has less then the amount to be reduced, the error is raised
+:return: A message confirming the status of reducing and the updated user
+:rtype: Both are dictionaries</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.delete">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.delete" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes the user, if found, from the database
+:param username: the username of the user to be deleted
+:type user: string
+:return: A message confirming deletion status
+:rtype: Dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.get_user_by_username">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">get_user_by_username</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#get_user_by_username"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.get_user_by_username" title="Permalink to this definition"></a></dt>
+<dd><p>Gets information of a specific user through his username
+:param username: The username of the wanted customer
+:type user: string
+:return: The information of the the wanted user
+:rtype: Dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.get_users">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">get_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#get_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.get_users" title="Permalink to this definition"></a></dt>
+<dd><p>Get all users from the database
+:return: list containing information of all users
+:rtype: List of dictionaries</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.register">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.register" title="Permalink to this definition"></a></dt>
+<dd><p>Registers the user in the database, checks if the username is already in use, and creates a wallet for the user
+initialized to 0$
+:param user: contains all information about the customer
+:type user: dictionary
+:raises UserAlreadyTaken: if the user’s username is already in the database, it doesn’t allow him to register
+:return: A message confirming registration status and the infromation of the registered user
+:rtype: Both are dictionaries</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer.update_user">
+<span class="sig-prename descclassname"><span class="pre">customer.</span></span><span class="sig-name descname"><span class="pre">update_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer.html#update_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer.update_user" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the user in the database having the same username as the user passed as a parameter. It check if the
+user is found in the database. The wallet can’t be updated using this function.
+:param user: contains all information about the updated customer
+:type user: dictionary
+:return: The information of the updated user if update is complete, a message if update fails
+:rtype: Both are dictionaries</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Customer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, wmd.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

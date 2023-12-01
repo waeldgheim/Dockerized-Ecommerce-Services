@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>customer &mdash; Customer 00.00.01 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Customer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Customer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Customer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">customer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for customer</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python </span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span><span class="n">request</span><span class="p">,</span><span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">CORS</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="sa">r</span><span class="s2">&quot;/*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;origins&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">}})</span>
+
+<div class="viewcode-block" id="InsufficientAmount"><a class="viewcode-back" href="../customer.html#customer.InsufficientAmount">[docs]</a><span class="k">class</span> <span class="nc">InsufficientAmount</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserAlreadyTaken"><a class="viewcode-back" href="../customer.html#customer.UserAlreadyTaken">[docs]</a><span class="k">class</span> <span class="nc">UserAlreadyTaken</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../customer.html#customer.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Registers the user in the database, checks if the username is already in use, and creates a wallet for the user </span>
+<span class="sd">    initialized to 0$</span>
+<span class="sd">    :param user: contains all information about the customer</span>
+<span class="sd">    :type user: dictionary</span>
+<span class="sd">    :raises UserAlreadyTaken: if the user&#39;s username is already in the database, it doesn&#39;t allow him to register</span>
+<span class="sd">    :return: A message confirming registration status and the infromation of the registered user</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">registered_user</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">message</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="p">{}:</span>
+            <span class="k">raise</span> <span class="n">UserAlreadyTaken</span><span class="p">(</span><span class="s2">&quot;Username already taken&quot;</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;INSERT INTO users (fullname, username, password, age, address, gender, marital_status, wallet) VALUES (?, ?, ?, ?, ?, ?, ?, 0)&quot;</span>
+                <span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;fullname&#39;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;marital_status&#39;</span><span class="p">])</span> <span class="p">}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/post&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Successful Registration&quot;</span>
+        <span class="n">registered_user</span> <span class="o">=</span> <span class="n">user</span>
+    <span class="k">except</span> <span class="n">UserAlreadyTaken</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Username already taken&quot;</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">registered_user</span></div>
+
+<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../customer.html#customer.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deletes the user, if found, from the database</span>
+<span class="sd">    :param username: the username of the user to be deleted</span>
+<span class="sd">    :type user: string</span>
+<span class="sd">    :return: A message confirming deletion status</span>
+<span class="sd">    :rtype: Dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="o">==</span> <span class="p">{}:</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;User not found&quot;</span>
+        <span class="k">return</span> <span class="n">message</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;DELETE from users WHERE username = ?&quot;</span><span class="p">,</span> 
+               <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">username</span><span class="p">,)}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/delete&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;User deleted successfully&quot;</span> 
+    <span class="k">except</span><span class="p">:</span> 
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Cannot delete user&quot;</span> 
+    <span class="k">finally</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">message</span></div>
+
+<div class="viewcode-block" id="update_user"><a class="viewcode-back" href="../customer.html#customer.update_user">[docs]</a><span class="k">def</span> <span class="nf">update_user</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Updates the user in the database having the same username as the user passed as a parameter. It check if the </span>
+<span class="sd">    user is found in the database. The wallet can&#39;t be updated using this function.</span>
+<span class="sd">    :param user: contains all information about the updated customer</span>
+<span class="sd">    :type user: dictionary</span>
+<span class="sd">    :return: The information of the updated user if update is complete, a message if update fails</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="n">l</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="p">{}:</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;User not found&#39;</span>
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_user</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;UPDATE users SET fullname = ?, username = ?, password= ?, age= ?, address= ?, gender= ?, marital_status= ? WHERE username =?&quot;</span><span class="p">,</span> 
+                 <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;fullname&quot;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;address&quot;</span><span class="p">],</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;marital_status&quot;</span><span class="p">],</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],)}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/put&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Succefully updated customer&quot;</span>
+        <span class="n">updated_user</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Unsuccessful update&quot;</span>
+         <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">finally</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_user</span></div>
+
+<div class="viewcode-block" id="get_users"><a class="viewcode-back" href="../customer.html#customer.get_users">[docs]</a><span class="k">def</span> <span class="nf">get_users</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all users from the database</span>
+<span class="sd">    :return: list containing information of all users</span>
+<span class="sd">    :rtype: List of dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;SELECT * FROM users&quot;</span><span class="p">}</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/get&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">users</span></div>
+
+<div class="viewcode-block" id="get_user_by_username"><a class="viewcode-back" href="../customer.html#customer.get_user_by_username">[docs]</a><span class="k">def</span> <span class="nf">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">):</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets information of a specific user through his username</span>
+<span class="sd">    :param username: The username of the wanted customer</span>
+<span class="sd">    :type user: string</span>
+<span class="sd">    :return: The information of the the wanted user</span>
+<span class="sd">    :rtype: Dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;SELECT * FROM users WHERE username = ?&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">username</span><span class="p">,)}</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/get&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">user</span></div>
+
+<div class="viewcode-block" id="charge"><a class="viewcode-back" href="../customer.html#customer.charge">[docs]</a><span class="k">def</span> <span class="nf">charge</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Increasing the wallet of the user by a number (amount)</span>
+<span class="sd">    :param username: the username of the user whose wallet is to be modified</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :param amount: amount we want to add to the wallet</span>
+<span class="sd">    :type amount: float</span>
+<span class="sd">    :raises TypeError: if the amount given is not in integers nor float, it raises the error</span>
+<span class="sd">    :return: A message confirming the status of charging and the updated user</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Successfully charged!&quot;</span>
+    <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="o">!=</span> <span class="nb">float</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+        <span class="n">query</span><span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;UPDATE users SET  wallet= ? WHERE username =?&quot;</span><span class="p">,</span> 
+                <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;wallet&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">amount</span><span class="p">,</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],)</span> <span class="p">}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/put&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">updated_user</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> 
+    <span class="k">except</span><span class="p">:</span>
+         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Amount should be a number&quot;</span> 
+         <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">finally</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_user</span></div>
+
+    
+<div class="viewcode-block" id="deduce_wallet"><a class="viewcode-back" href="../customer.html#customer.deduce_wallet">[docs]</a><span class="k">def</span> <span class="nf">deduce_wallet</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decreasing the wallet of the user by a number (amount)</span>
+<span class="sd">    :param username: the username of the user whose wallet is to be modified</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :param amount: amount we want to reduce from the wallet</span>
+<span class="sd">    :type amount: float</span>
+<span class="sd">    :raises TypeError: if the amount given is not in integers nor float, it raises the error</span>
+<span class="sd">    :raises InsufficientAmount: if the user&#39;s wallet has less then the amount to be reduced, the error is raised</span>
+<span class="sd">    :return: A message confirming the status of reducing and the updated user</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Successfully reduced!&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="o">!=</span> <span class="nb">float</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+        <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;wallet&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">amount</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InsufficientAmount</span><span class="p">(</span><span class="s1">&#39;Not enough available to spend </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amount</span><span class="p">))</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;UPDATE users SET  wallet= ? WHERE username =?&quot;</span><span class="p">,</span> 
+                 <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;wallet&quot;</span><span class="p">]</span><span class="o">-</span><span class="n">amount</span><span class="p">,</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],)}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/put&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">updated_user</span> <span class="o">=</span> <span class="n">get_user_by_username</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">])</span> 
+    <span class="k">except</span> <span class="n">InsufficientAmount</span><span class="p">:</span>
+         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not enough available to spend </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+         <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">except</span><span class="p">:</span>
+         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Amount should be a number&quot;</span> 
+         <span class="n">updated_user</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">finally</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_user</span></div>
+
+
+<div class="viewcode-block" id="api_get_users"><a class="viewcode-back" href="../customer.html#customer.api_get_users">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_get_users</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of get_users()</span>
+<span class="sd">    :return: the information of all users in the database</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">get_users</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="api_get_user"><a class="viewcode-back" href="../customer.html#customer.api_get_user">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users/&lt;username&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_get_user</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of get_user_by_username()</span>
+<span class="sd">    :param username: the username of the user whose information we are getting</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :return: the information of the user</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_add_user"><a class="viewcode-back" href="../customer.html#customer.api_add_user">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users/add&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_add_user</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of register()</span>
+<span class="sd">    :return: A message confirming registration status and the infromation of the registered user</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="n">user</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_update_user"><a class="viewcode-back" href="../customer.html#customer.api_update_user">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users/update&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_update_user</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of update_user()</span>
+<span class="sd">    :return: The information of the updated user if update is complete, a message if update fails</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">update_user</span><span class="p">(</span><span class="n">user</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_delete_user"><a class="viewcode-back" href="../customer.html#customer.api_delete_user">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users/delete/&lt;username&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_delete_user</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of delete()</span>
+<span class="sd">    :param username: the username of the user whom we&#39;re deleting</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :return: A message confirming deletion status</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">delete</span><span class="p">(</span><span class="n">username</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="api_charge"><a class="viewcode-back" href="../customer.html#customer.api_charge">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users/charge/&lt;username&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_charge</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of charge()</span>
+<span class="sd">    :param username: the username of the user whose wallet we&#39;re charging</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :return: A message confirming the status of charging and the updated user</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">charge</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">amount</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_reduce"><a class="viewcode-back" href="../customer.html#customer.api_reduce">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/users/deduce/&lt;username&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_reduce</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of deduce_wallet()</span>
+<span class="sd">    :param username: the username of the user whose wallet we&#39;re decreasing</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :return: A message confirming the status of deducing and the updated user</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">deduce_wallet</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">amount</span><span class="p">))</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs the flask app</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="n">port</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span> <span class="c1">#run app   </span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, wmd.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

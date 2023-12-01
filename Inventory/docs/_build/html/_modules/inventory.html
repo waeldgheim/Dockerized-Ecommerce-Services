@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>inventory &mdash; Sales 00.00.01 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Sales
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Inventory</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Sales</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">inventory</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for inventory</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python </span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span><span class="n">request</span><span class="p">,</span><span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">CORS</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="sa">r</span><span class="s2">&quot;/*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;origins&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">}})</span>
+
+<div class="viewcode-block" id="CategoryNotFound"><a class="viewcode-back" href="../inventory.html#inventory.CategoryNotFound">[docs]</a><span class="k">class</span> <span class="nc">CategoryNotFound</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="OutOfStock"><a class="viewcode-back" href="../inventory.html#inventory.OutOfStock">[docs]</a><span class="k">class</span> <span class="nc">OutOfStock</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="InsuffcientAmount"><a class="viewcode-back" href="../inventory.html#inventory.InsuffcientAmount">[docs]</a><span class="k">class</span> <span class="nc">InsuffcientAmount</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="AlreadyRegistered"><a class="viewcode-back" href="../inventory.html#inventory.AlreadyRegistered">[docs]</a><span class="k">class</span> <span class="nc">AlreadyRegistered</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="add_goods"><a class="viewcode-back" href="../inventory.html#inventory.add_goods">[docs]</a><span class="k">def</span> <span class="nf">add_goods</span><span class="p">(</span><span class="n">good</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds the good to the database</span>
+<span class="sd">    :param good: Contains information about the good</span>
+<span class="sd">    :type user: dictionary</span>
+<span class="sd">    :raises CategoryNotFound: if the category is invalid, the error will be raised</span>
+<span class="sd">    :return: A message confirming registration status and the information of the registered good</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;food&quot;</span> <span class="ow">and</span>  <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;clothes&quot;</span> <span class="ow">and</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;accessories&quot;</span> <span class="ow">and</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;electronics&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CategoryNotFound</span> <span class="p">(</span><span class="s2">&quot;Category is invalid&quot;</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;INSERT INTO goods (name,category,price,description,count) VALUES (?, ?, ?, ?, ?)&quot;</span>
+                <span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">good</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]]}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/post&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Successful Registration&quot;</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Category is invalid&quot;</span>
+        <span class="n">good</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">good</span></div>
+
+<div class="viewcode-block" id="deduce_good"><a class="viewcode-back" href="../inventory.html#inventory.deduce_good">[docs]</a><span class="k">def</span> <span class="nf">deduce_good</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reduces the count of the good by a certain number</span>
+<span class="sd">    :param name: Name of the good whose count we want to reduce</span>
+<span class="sd">    :type name: string</span>
+<span class="sd">    :raises OutOfStock: when the count of the good = 0 before deduction, the error will be raised</span>
+<span class="sd">    :return: A message confirming deduction status and the information of the updated good</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">good</span> <span class="o">=</span> <span class="n">get_good_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">updated_good</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">good</span> <span class="o">==</span> <span class="p">{}:</span>
+       <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Good not found&#39;</span>
+       <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_good</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span>  <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OutOfStock</span> <span class="p">(</span><span class="s2">&quot;Good is out of stock&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InsuffcientAmount</span><span class="p">(</span><span class="s2">&quot;Not enough &quot;</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;UPDATE goods SET count= ? WHERE name =?&quot;</span><span class="p">,</span> 
+                <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">amount</span><span class="p">,</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],)}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/put&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">updated_good</span> <span class="o">=</span> <span class="n">get_good_by_name</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Succefully deduced item&quot;</span>
+    <span class="k">except</span> <span class="n">OutOfStock</span><span class="p">:</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Good is out of stock&quot;</span>
+    <span class="k">except</span> <span class="n">InsuffcientAmount</span><span class="p">:</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;Not enough </span><span class="si">{}</span><span class="s1"> in stock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+         <span class="n">updated_good</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="k">finally</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_good</span></div>
+
+<div class="viewcode-block" id="update_good"><a class="viewcode-back" href="../inventory.html#inventory.update_good">[docs]</a><span class="k">def</span> <span class="nf">update_good</span><span class="p">(</span><span class="n">good</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Updates the information of a specified good</span>
+<span class="sd">    :param good: contains the information of the specified good</span>
+<span class="sd">    :type name: dictionary</span>
+<span class="sd">    :return: A message confirming update status and the information of the updated good</span>
+<span class="sd">    :rtype: Both are dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">updated_good</span> <span class="o">=</span> <span class="p">{}</span> 
+    <span class="n">l</span> <span class="o">=</span> <span class="n">get_good_by_name</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="p">{}:</span>
+       <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Good not found&#39;</span>
+       <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_good</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;food&quot;</span> <span class="ow">and</span>  <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;clothes&quot;</span> <span class="ow">and</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;accessories&quot;</span> <span class="ow">and</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span><span class="s2">&quot;electronics&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CategoryNotFound</span> <span class="p">(</span><span class="s2">&quot;Category is invalid&quot;</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="s2">&quot;UPDATE goods SET name = ?, category = ?, price= ?, description= ?, count= ? WHERE name =?&quot;</span><span class="p">,</span> 
+                 <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],)}</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/put&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Succefully updated good&quot;</span>
+        <span class="n">updated_good</span> <span class="o">=</span> <span class="n">good</span>
+    <span class="k">except</span><span class="p">:</span>
+         <span class="n">updated_good</span> <span class="o">=</span> <span class="p">{}</span>
+         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Category is invalid&quot;</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">message</span><span class="p">,</span><span class="n">updated_good</span></div>
+
+
+<div class="viewcode-block" id="get_good_by_name"><a class="viewcode-back" href="../inventory.html#inventory.get_good_by_name">[docs]</a><span class="k">def</span> <span class="nf">get_good_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the information of the good from the database using its name</span>
+<span class="sd">    :param name: Name of the good we want to extract</span>
+<span class="sd">    :type name: string</span>
+<span class="sd">    :return: the information of the specified good</span>
+<span class="sd">    :rtype: dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">good</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;SELECT * FROM goods WHERE name = ?&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">name</span><span class="p">,)}</span>
+        <span class="n">good</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/get&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">good</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">good</span></div>
+
+<div class="viewcode-block" id="api_add_user"><a class="viewcode-back" href="../inventory.html#inventory.api_add_user">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/goods/add&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_add_user</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of add_goods()</span>
+<span class="sd">    :return: A message confirming registration status and the infromation of the registered good</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">good</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">add_goods</span><span class="p">(</span><span class="n">good</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_reduce"><a class="viewcode-back" href="../inventory.html#inventory.api_reduce">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/goods/deduce/&lt;name&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_reduce</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of deduce_good()</span>
+<span class="sd">    :param name: the name of the good whose count we&#39;re reducing</span>
+<span class="sd">    :type name: string</span>
+<span class="sd">    :return: A message confirming deduction status and the information of the updated good</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">deduce_good</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">amount</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_update_user"><a class="viewcode-back" href="../inventory.html#inventory.api_update_user">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/goods/update&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_update_user</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of update_good()</span>
+<span class="sd">    :return: A message confirming update status and the information of the updated good</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">good</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">update_good</span><span class="p">(</span><span class="n">good</span><span class="p">))</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs the flask app</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#app.debug = True</span>
+    <span class="c1">#app.run(debug=True)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span> <span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span><span class="n">port</span><span class="o">=</span><span class="mi">7000</span><span class="p">)</span> <span class="c1">#run app</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, wmd.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
