@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 # -- Project information this part should keep the information you entered in the quikstart wizard-----------------------------------------------------
 
-project = 'Sales'
+project = 'Inventory'
 copyright = '2023, wmd'
 author = 'wmd'
 

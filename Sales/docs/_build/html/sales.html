@@ -1,114 +1,231 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-    <title>sales module &#8212; Sales  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sales module &mdash; Sales 00.00.01 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Sales" href="modules.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="prev" title="Sales" href="modules.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
-
-          <div class="body" role="main">
-            
-  <section id="sales-module">
-<h1>sales module<a class="headerlink" href="#sales-module" title="Permalink to this heading">¶</a></h1>
-</section>
-
-
-          </div>
           
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Sales</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+          <a href="index.html" class="icon icon-home">
+            Sales
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Sales</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">sales module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sales module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sales.InsufficientAmount"><code class="docutils literal notranslate"><span class="pre">InsufficientAmount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.OutOfStock"><code class="docutils literal notranslate"><span class="pre">OutOfStock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.api_get_good"><code class="docutils literal notranslate"><span class="pre">api_get_good()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.api_get_prices"><code class="docutils literal notranslate"><span class="pre">api_get_prices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.api_history"><code class="docutils literal notranslate"><span class="pre">api_history()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.api_sale"><code class="docutils literal notranslate"><span class="pre">api_sale()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.get_good_by_name"><code class="docutils literal notranslate"><span class="pre">get_good_by_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.get_history"><code class="docutils literal notranslate"><span class="pre">get_history()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.get_prices"><code class="docutils literal notranslate"><span class="pre">get_prices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.sale"><code class="docutils literal notranslate"><span class="pre">sale()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sales.save_purchase"><code class="docutils literal notranslate"><span class="pre">save_purchase()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">Sales</a><ul>
-      <li>Previous: <a href="modules.html" title="previous chapter">Sales</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2023, wmd.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="_sources/sales.rst.txt"
-          rel="nofollow">Page source</a>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Sales</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Sales</a></li>
+      <li class="breadcrumb-item active">sales module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sales.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sales">
+<span id="sales-module"></span><h1>sales module<a class="headerlink" href="#module-sales" title="Permalink to this heading"></a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="sales.InsufficientAmount">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">InsufficientAmount</span></span><a class="reference internal" href="_modules/sales.html#InsufficientAmount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.InsufficientAmount" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sales.OutOfStock">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">OutOfStock</span></span><a class="reference internal" href="_modules/sales.html#OutOfStock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.OutOfStock" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.api_get_good">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">api_get_good</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#api_get_good"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.api_get_good" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of get_good_by_name()
+:param name: name of the good whose details we want
+:type name: string
+:return: the information of the item
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.api_get_prices">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">api_get_prices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#api_get_prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.api_get_prices" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of get_prices()
+:return: the prices of all items in the database
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.api_history">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">api_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#api_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.api_history" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of get_history()
+:param username: username of the customer whose history we’re seeking
+:type username: string
+:return: Purchase history of the customer
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.api_sale">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">api_sale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#api_sale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.api_sale" title="Permalink to this definition"></a></dt>
+<dd><p>API implementation of sale()
+:param username: username of the customer who did the purchase
+:type username: string
+:param name: name of the good that got purchased
+:type name: string
+:return: A message confirming purchase status
+:rtype: json object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.get_good_by_name">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">get_good_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#get_good_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.get_good_by_name" title="Permalink to this definition"></a></dt>
+<dd><p>Get the information of the good from the database using its name
+:param name: Name of the good we want to extract
+:type name: string
+:return: the information of the specified good
+:rtype: dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.get_history">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">get_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#get_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.get_history" title="Permalink to this definition"></a></dt>
+<dd><p>Given the username of the customer, this function returns the purchase history of this customer by
+adding the item to a dictionary. If it was already found, increase it value by one. If not, initialize it to 1.
+:param username: username of the customer whose history we want
+:type username: string
+:return: Purchase history of the customer
+:rtype: dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.get_prices">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">get_prices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#get_prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.get_prices" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the name and the price of each element in the database
+:return: A list of dictionaries each containing the name and the price of the goods
+:rtype: list</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.sale">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">sale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#sale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.sale" title="Permalink to this definition"></a></dt>
+<dd><p>This is called when a purchase occured. The count of the item will be reduced by a certain amount and the users wallet will
+be reduced by the price by the item. It also calls the function to save the purchase in the database.
+:param username: username of the user who made the purchase
+:type username: string
+:param name: name of the item that got purchased
+:type name: string
+:raises InsufficientAmount: if the user doesn’t have the item’s price in his wallet, the error will be raised
+:raises OutOfStock: if the item’s count is equal to 0, the error will be raised
+:return: A message confirming purchase status
+:rtype: Dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sales.save_purchase">
+<span class="sig-prename descclassname"><span class="pre">sales.</span></span><span class="sig-name descname"><span class="pre">save_purchase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sales.html#save_purchase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sales.save_purchase" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the purchase made by a customer in the databse by saving his username and the name of the item
+:param username: username of the user who made the purchase
+:type username: string
+:param name: name of the item that got purchased
+:type name: string</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Sales" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
-    
+  <hr/>
 
-    
-  </body>
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, wmd.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

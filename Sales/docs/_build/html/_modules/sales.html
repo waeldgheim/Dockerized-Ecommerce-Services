@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sales &mdash; Sales 00.00.01 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Sales
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Sales</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Sales</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sales</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sales</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span><span class="n">request</span><span class="p">,</span><span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">CORS</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="sa">r</span><span class="s2">&quot;/*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;origins&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">}})</span>
+
+<div class="viewcode-block" id="InsufficientAmount"><a class="viewcode-back" href="../sales.html#sales.InsufficientAmount">[docs]</a><span class="k">class</span> <span class="nc">InsufficientAmount</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="OutOfStock"><a class="viewcode-back" href="../sales.html#sales.OutOfStock">[docs]</a><span class="k">class</span> <span class="nc">OutOfStock</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="get_prices"><a class="viewcode-back" href="../sales.html#sales.get_prices">[docs]</a><span class="k">def</span> <span class="nf">get_prices</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the name and the price of each element in the database</span>
+<span class="sd">    :return: A list of dictionaries each containing the name and the price of the goods</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">goods</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;SELECT * FROM goods&quot;</span><span class="p">}</span>
+        <span class="n">goods</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/get&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">goods</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">return</span> <span class="n">goods</span></div>
+
+<div class="viewcode-block" id="sale"><a class="viewcode-back" href="../sales.html#sales.sale">[docs]</a><span class="k">def</span> <span class="nf">sale</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This is called when a purchase occured. The count of the item will be reduced by a certain amount and the users wallet will</span>
+<span class="sd">    be reduced by the price by the item. It also calls the function to save the purchase in the database.</span>
+<span class="sd">    :param username: username of the user who made the purchase</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :param name: name of the item that got purchased</span>
+<span class="sd">    :type name: string</span>
+<span class="sd">    :raises InsufficientAmount: if the user doesn&#39;t have the item&#39;s price in his wallet, the error will be raised</span>
+<span class="sd">    :raises OutOfStock: if the item&#39;s count is equal to 0, the error will be raised</span>
+<span class="sd">    :return: A message confirming purchase status</span>
+<span class="sd">    :rtype: Dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">good</span> <span class="o">=</span> <span class="n">get_good_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.3:3000/api/users/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;wallet&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+            <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.3:3000/api/users/deduce/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">),</span><span class="n">json</span> <span class="o">=</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">amount</span><span class="p">))</span>
+            <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.4:7000/api/goods/deduce/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="n">json</span><span class="o">=</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;wallet&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">InsufficientAmount</span><span class="p">(</span><span class="s1">&#39;Not enough available to spend </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OutOfStock</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is out of stock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">amount</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="s1">&#39;Not enough </span><span class="si">{}</span><span class="s1"> in stock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+        <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Purchase successful&quot;</span>
+        <span class="n">save_purchase</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">amount</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">InsufficientAmount</span><span class="p">:</span>
+       <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not enough available to spend </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">OutOfStock</span><span class="p">:</span>
+       <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is out of stock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+       <span class="n">message</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span><span class="s1">&#39;Not enough </span><span class="si">{}</span><span class="s1"> in stock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">message</span></div>
+
+<div class="viewcode-block" id="save_purchase"><a class="viewcode-back" href="../sales.html#sales.save_purchase">[docs]</a><span class="k">def</span> <span class="nf">save_purchase</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves the purchase made by a customer in the databse by saving his username and the name of the item</span>
+<span class="sd">    :param username: username of the user who made the purchase</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :param name: name of the item that got purchased</span>
+<span class="sd">    :type name: string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span> <span class="p">:</span> <span class="n">username</span><span class="p">,</span><span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span><span class="n">amount</span><span class="p">}</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;INSERT INTO history (name, item,amount) VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">],</span> <span class="n">l</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;amount&#39;</span><span class="p">])</span> <span class="p">}</span>
+    <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/post&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_history"><a class="viewcode-back" href="../sales.html#sales.get_history">[docs]</a><span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given the username of the customer, this function returns the purchase history of this customer by</span>
+<span class="sd">    adding the item to a dictionary. If it was already found, increase it value by one. If not, initialize it to 1.</span>
+<span class="sd">    :param username: username of the customer whose history we want</span>
+<span class="sd">    :type username: string</span>
+<span class="sd">    :return: Purchase history of the customer</span>
+<span class="sd">    :rtype: dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;SELECT * FROM history WHERE name = ?&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">username</span><span class="p">,)}</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/get&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">history</span></div>
+
+<div class="viewcode-block" id="get_good_by_name"><a class="viewcode-back" href="../sales.html#sales.get_good_by_name">[docs]</a><span class="k">def</span> <span class="nf">get_good_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the information of the good from the database using its name</span>
+<span class="sd">    :param name: Name of the good we want to extract</span>
+<span class="sd">    :type name: string</span>
+<span class="sd">    :return: the information of the specified good</span>
+<span class="sd">    :rtype: dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">good</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span><span class="s2">&quot;SELECT * FROM goods WHERE name = ?&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;2&quot;</span><span class="p">:(</span><span class="n">name</span><span class="p">,)}</span>
+        <span class="n">good</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://172.17.0.2:5000/api/get&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">good</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">good</span></div>
+
+<div class="viewcode-block" id="api_get_prices"><a class="viewcode-back" href="../sales.html#sales.api_get_prices">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/prices&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_get_prices</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of get_prices()</span>
+<span class="sd">    :return: the prices of all items in the database</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">get_prices</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="api_get_good"><a class="viewcode-back" href="../sales.html#sales.api_get_good">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/goods/&lt;name&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_get_good</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of get_good_by_name()</span>
+<span class="sd">    :param name: name of the good whose details we want</span>
+<span class="sd">    :type name: string </span>
+<span class="sd">    :return: the information of the item</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">get_good_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_sale"><a class="viewcode-back" href="../sales.html#sales.api_sale">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/sale/&lt;username&gt;,&lt;name&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_sale</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of sale()</span>
+<span class="sd">    :param username: username of the customer who did the purchase</span>
+<span class="sd">    :type username: string </span>
+<span class="sd">    :param name: name of the good that got purchased</span>
+<span class="sd">    :type name: string </span>
+<span class="sd">    :return: A message confirming purchase status</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">sale</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">amount</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="api_history"><a class="viewcode-back" href="../sales.html#sales.api_history">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/history/&lt;username&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">api_history</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;API implementation of get_history()</span>
+<span class="sd">    :param username: username of the customer whose history we&#39;re seeking</span>
+<span class="sd">    :type username: string </span>
+<span class="sd">    :return: Purchase history of the customer</span>
+<span class="sd">    :rtype: json object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">get_history</span><span class="p">(</span><span class="n">username</span><span class="p">))</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1">#app.debug = True</span>
+    <span class="c1">#app.run(debug=True)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span> <span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span><span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span> <span class="c1">#run app</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, wmd.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
