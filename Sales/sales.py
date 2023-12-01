@@ -42,11 +42,11 @@ def sale(username,name,amount):
     user = requests.get('http://172.17.0.3:3000/api/users/{}'.format(username)).json()
     message = {}
     try:
-        if user["wallet"] >= good["price"] and good["count"] > amount:
+        if user["wallet"] >= (good["price"]*amount) and good["count"] > amount:
             requests.put('http://172.17.0.3:3000/api/users/deduce/{}'.format(username),json =(good["price"]*amount))
             requests.put('http://172.17.0.4:7000/api/goods/deduce/{}'.format(name),json= amount)
-        elif user["wallet"] < good["price"]:
-            raise InsufficientAmount('Not enough available to spend {}'.format(good["price"]))
+        elif user["wallet"] < (good["price"]*amount):
+            raise InsufficientAmount('Not enough available to spend {}'.format(good["price"]*amount))
         elif good["count"] == 0:
             raise OutOfStock('{} is out of stock'.format(good["name"]))
         elif good["count"] - amount<0:
@@ -54,7 +54,7 @@ def sale(username,name,amount):
         message["status"] = "Purchase successful"
         save_purchase(username,name,amount)
     except InsufficientAmount:
-       message["status"] = 'Not enough available to spend {}'.format(good["price"])
+       message["status"] = 'Not enough available to spend {}'.format(good["price"]*amount)
     except OutOfStock:
        message["status"] = '{} is out of stock'.format(good["name"])
     except:
